@@ -13,6 +13,7 @@ import com.gabrielarodrigues.cursomc.domain.Cidade;
 import com.gabrielarodrigues.cursomc.domain.Cliente;
 import com.gabrielarodrigues.cursomc.domain.Endereco;
 import com.gabrielarodrigues.cursomc.domain.Estado;
+import com.gabrielarodrigues.cursomc.domain.ItemPedido;
 import com.gabrielarodrigues.cursomc.domain.Pagamento;
 import com.gabrielarodrigues.cursomc.domain.PagamentoComBoleto;
 import com.gabrielarodrigues.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.gabrielarodrigues.cursomc.repositories.CidadeRepository;
 import com.gabrielarodrigues.cursomc.repositories.ClienteRepository;
 import com.gabrielarodrigues.cursomc.repositories.EnderecoRepository;
 import com.gabrielarodrigues.cursomc.repositories.EstadoRepository;
+import com.gabrielarodrigues.cursomc.repositories.ItemPedidoRepository;
 import com.gabrielarodrigues.cursomc.repositories.PagamentoRepository;
 import com.gabrielarodrigues.cursomc.repositories.PedidoRepository;
 import com.gabrielarodrigues.cursomc.repositories.ProdutoRepository;
@@ -37,24 +39,28 @@ public class CursomcApplication implements CommandLineRunner{
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
-	
+
 	@Autowired
 	private EstadoRepository estadoRepository;
-	
+
 	@Autowired
 	private CidadeRepository cidadeRepository;
-	
+
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+
+	@Autowired
+	private PedidoRepository pedidoRepository;
+
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
-	
-	  @Autowired private PedidoRepository pedidoRepository;
-	  
-	  @Autowired private PagamentoRepository pagamentoRepository;
-	 	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepositoty;
+
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
 	}
@@ -122,7 +128,21 @@ public class CursomcApplication implements CommandLineRunner{
 		  
 		  pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		  pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
-		 		
+		  
+		  
+		  ItemPedido ip1 = new ItemPedido(ped2, p1, 0.00, 1, 2000.00);
+		  ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.0);
+		  ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		  
+		  ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		  ped2.getItens().addAll(Arrays.asList(ip3));
+		  
+		  p1.getItens().addAll(Arrays.asList(ip1));
+		  p2.getItens().addAll(Arrays.asList(ip3));
+		  p3.getItens().addAll(Arrays.asList(ip2));
+		  
+		  
+		  itemPedidoRepositoty.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 
 }
